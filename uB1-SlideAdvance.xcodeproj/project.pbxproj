@@ -1,0 +1,257 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D2D5CF21AC5EB60009AEAC1 /* KeynoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2D5CF11AC5EB60009AEAC1 /* KeynoteController.swift */; };
+		2D2D5CF41AC5EB92009AEAC1 /* BluetoothState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2D5CF31AC5EB92009AEAC1 /* BluetoothState.swift */; };
+		2D2D5CF61AC5EBC0009AEAC1 /* BluetoothRemoteControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2D5CF51AC5EBC0009AEAC1 /* BluetoothRemoteControl.swift */; };
+		2D2D5CF81AC5EC3E009AEAC1 /* RemoteControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2D5CF71AC5EC3E009AEAC1 /* RemoteControllable.swift */; };
+		2D2E28491A6D9B830069F27B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E28481A6D9B830069F27B /* main.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2D2E28431A6D9B830069F27B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2D2D5CF11AC5EB60009AEAC1 /* KeynoteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeynoteController.swift; sourceTree = "<group>"; };
+		2D2D5CF31AC5EB92009AEAC1 /* BluetoothState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothState.swift; sourceTree = "<group>"; };
+		2D2D5CF51AC5EBC0009AEAC1 /* BluetoothRemoteControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothRemoteControl.swift; sourceTree = "<group>"; };
+		2D2D5CF71AC5EC3E009AEAC1 /* RemoteControllable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteControllable.swift; sourceTree = "<group>"; };
+		2D2E28451A6D9B830069F27B /* uB1-SlideAdvance */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "uB1-SlideAdvance"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D2E28481A6D9B830069F27B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2D2E28421A6D9B830069F27B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2D2E283C1A6D9B830069F27B = {
+			isa = PBXGroup;
+			children = (
+				2D2E28471A6D9B830069F27B /* uB1-SlideAdvance */,
+				2D2E28461A6D9B830069F27B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2D2E28461A6D9B830069F27B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D2E28451A6D9B830069F27B /* uB1-SlideAdvance */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2D2E28471A6D9B830069F27B /* uB1-SlideAdvance */ = {
+			isa = PBXGroup;
+			children = (
+				2D2E28481A6D9B830069F27B /* main.swift */,
+				2D2D5CF71AC5EC3E009AEAC1 /* RemoteControllable.swift */,
+				2D2D5CF11AC5EB60009AEAC1 /* KeynoteController.swift */,
+				2D2D5CF31AC5EB92009AEAC1 /* BluetoothState.swift */,
+				2D2D5CF51AC5EBC0009AEAC1 /* BluetoothRemoteControl.swift */,
+			);
+			path = "uB1-SlideAdvance";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2D2E28441A6D9B830069F27B /* uB1-SlideAdvance */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D2E284C1A6D9B830069F27B /* Build configuration list for PBXNativeTarget "uB1-SlideAdvance" */;
+			buildPhases = (
+				2D2E28411A6D9B830069F27B /* Sources */,
+				2D2E28421A6D9B830069F27B /* Frameworks */,
+				2D2E28431A6D9B830069F27B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "uB1-SlideAdvance";
+			productName = "uB1-SlideAdvance";
+			productReference = 2D2E28451A6D9B830069F27B /* uB1-SlideAdvance */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2D2E283D1A6D9B830069F27B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "LS Research";
+				TargetAttributes = {
+					2D2E28441A6D9B830069F27B = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 2D2E28401A6D9B830069F27B /* Build configuration list for PBXProject "uB1-SlideAdvance" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2D2E283C1A6D9B830069F27B;
+			productRefGroup = 2D2E28461A6D9B830069F27B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2D2E28441A6D9B830069F27B /* uB1-SlideAdvance */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2D2E28411A6D9B830069F27B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D2E28491A6D9B830069F27B /* main.swift in Sources */,
+				2D2D5CF41AC5EB92009AEAC1 /* BluetoothState.swift in Sources */,
+				2D2D5CF61AC5EBC0009AEAC1 /* BluetoothRemoteControl.swift in Sources */,
+				2D2D5CF81AC5EC3E009AEAC1 /* RemoteControllable.swift in Sources */,
+				2D2D5CF21AC5EB60009AEAC1 /* KeynoteController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2D2E284A1A6D9B830069F27B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2D2E284B1A6D9B830069F27B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2D2E284D1A6D9B830069F27B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2D2E284E1A6D9B830069F27B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D2E28401A6D9B830069F27B /* Build configuration list for PBXProject "uB1-SlideAdvance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D2E284A1A6D9B830069F27B /* Debug */,
+				2D2E284B1A6D9B830069F27B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D2E284C1A6D9B830069F27B /* Build configuration list for PBXNativeTarget "uB1-SlideAdvance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D2E284D1A6D9B830069F27B /* Debug */,
+				2D2E284E1A6D9B830069F27B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2D2E283D1A6D9B830069F27B /* Project object */;
+}
