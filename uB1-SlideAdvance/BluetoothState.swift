@@ -21,6 +21,10 @@ enum BluetoothState {
     case InterrogatingCharacteristics(CBPeripheral,
         gpioService: CBService)
 
+    case Subscribing(CBPeripheral,
+        inputCharacteristic: CBCharacteristic,
+        outputCharacteristic: CBCharacteristic)
+
     case Connected(CBPeripheral,
         inputCharacteristic: CBCharacteristic,
         outputCharacteristic: CBCharacteristic)

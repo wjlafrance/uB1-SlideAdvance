@@ -61,7 +61,7 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
                 case let .InterrogatingCharacteristics(peripheral, service):
                     peripheral.discoverCharacteristics([UUIDs.GpioInputState, UUIDs.GpioOutputState], forService: service)
 
-                case let .Connected(peripheral, inputCharacteristic, _):
+                case let .Subscribing(peripheral, inputCharacteristic, _):
                     peripheral.setNotifyValue(true, forCharacteristic: inputCharacteristic)
 
                 default: ()
@@ -121,11 +121,21 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
             return
         }
 
-        state = .Connected(peripheral, inputCharacteristic: input, outputCharacteristic: output)
+        state = .Subscribing(peripheral, inputCharacteristic: input, outputCharacteristic: output)
     }
 
     func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        print("Updated notification state for characteristic: \(characteristic.UUID)")
+        guard characteristic.isNotifying else {
+            print("Failed to subscribe to characteristic! Error? \(error)")
+            state = .Uninitialized
+            return
+        }
+
+        guard case let .Subscribing(peripheral, input, output) = state else {
+            preconditionFailure("How did we get subscribed when we're not in .Subscribing?")
+        }
+
+        state = .Connected(peripheral, inputCharacteristic: input, outputCharacteristic: output)
     }
 
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
