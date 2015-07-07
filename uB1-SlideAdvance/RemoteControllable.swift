@@ -9,3 +9,7 @@
 protocol RemoteControllable {
     func performAction()
 }
+
+struct TextRemoteControllable : RemoteControllable {
+    func performAction() { print("performAction()") }
+}
