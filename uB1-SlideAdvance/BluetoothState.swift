@@ -8,7 +8,7 @@
 
 import CoreBluetooth
 
-enum BluetoothState : Printable {
+enum BluetoothState {
 
     case Uninitialized
 
@@ -24,31 +24,5 @@ enum BluetoothState : Printable {
     case Connected(CBPeripheral,
         inputCharacteristic: CBCharacteristic,
         outputCharacteristic: CBCharacteristic)
-
-    //MARK: Printable conformance
-    var description: String {
-        get {
-            switch self {
-
-                case .Uninitialized:
-                    return ".Uninitialized"
-
-                case .Discovering:
-                    return ".Discovering"
-
-                case let .Connecting(peripheral):
-                    return ".Connecting (peripheral: \(peripheral))"
-
-                case let .InterrogatingServices(peripheral):
-                    return ".InterrogatingServices (peripheral: \(peripheral))"
-
-                case let .InterrogatingCharacteristics(peripheral, service):
-                    return ".InterrogatingCharacteristics (peripheral: \(peripheral), service: \(service))"
-
-                case let .Connected(peripheral, inputCharacteristic, outputCharacteristic):
-                    return ".Connected (peripheral: \(peripheral), inputCharacteristic: \(inputCharacteristic), outputCharacteristic: \(outputCharacteristic))"
-            }
-        }
-    }
 
 }

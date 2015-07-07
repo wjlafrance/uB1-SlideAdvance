@@ -17,13 +17,13 @@ class KeynoteController: RemoteControllable {
             var errorInfo: NSDictionary?
 
             if !script.compileAndReturnError(&errorInfo) {
-                println("Next script failed to compile: \(errorInfo)")
+                print("Next script failed to compile: \(errorInfo)")
             }
 
             let result = script.executeAndReturnError(&errorInfo)
-            println("Tried to show next. Result: \(result), errorInfo: \(errorInfo)")
+            print("Tried to show next. Result: \(result), errorInfo: \(errorInfo)")
         } else {
-            println("Failed to compile script with AppleScript: \(source)")
+            print("Failed to compile script with AppleScript: \(source)")
         }
     }
 

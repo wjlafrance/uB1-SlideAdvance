@@ -27,12 +27,12 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
                     centralManager.stopScan()
 
                 default:
-                    println("No action for leaving state")
+                    print("No action for leaving state")
             }
         }
 
         didSet {
-            println("BluetoothRemoteController transitioned to state \(state)")
+            print("BluetoothRemoteController transitioned to state \(state)")
 
             switch state {
                 case .Discovering:
@@ -52,7 +52,7 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
                     peripheral.setNotifyValue(true, forCharacteristic: inputCharacteristic)
 
                 default:
-                    println("No action for entering state")
+                    print("No action for entering state")
             }
         }
     }
@@ -69,7 +69,7 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
 
     //MARK: CBCentralManagerDelegate conformance
 
-    func centralManagerDidUpdateState(central: CBCentralManager!) {
+    func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == .PoweredOn {
             state = .Discovering
         } else {
@@ -77,42 +77,40 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
         }
     }
 
-    func centralManager(central: CBCentralManager!, didDiscoverPeripheral peripheral: CBPeripheral!, advertisementData: [NSObject : AnyObject]!, RSSI: NSNumber!) {
-        println("Discovered \(peripheral)")
-        if let peripheralName = peripheral.name {
-            if peripheralName == deviceName {
-                state = .Connecting(peripheral)
-            }
+    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+        print("Discovered \(peripheral)")
+        if let peripheralName = peripheral.name where peripheralName == deviceName {
+            state = .Connecting(peripheral)
         }
     }
 
-    func centralManager(central: CBCentralManager!, didConnectPeripheral peripheral: CBPeripheral!) {
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         state = .InterrogatingServices(peripheral)
     }
 
-    func centralManager(central: CBCentralManager!, didDisconnectPeripheral peripheral: CBPeripheral!, error: NSError!) {
+    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         state = .Discovering
     }
 
     //MARK: CBPeripheralDelegate conformance
 
-    func peripheral(peripheral: CBPeripheral!, didDiscoverServices error: NSError!) {
-        if let services = peripheral.services as? [CBService] {
+    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+        if let services = peripheral.services {
             for service in services {
                 if service.UUID == gpioServiceUuid {
                     state = .InterrogatingCharacteristics(peripheral, gpioService: service)
                     return
                 }
-                println("Discovered services, but failed to find GPIO service.")
+                print("Discovered services, but failed to find GPIO service.")
             }
         } else {
-            println("Failed to discover services. \(error)")
+            print("Failed to discover services. \(error)")
         }
         state = .Uninitialized
     }
 
-    func peripheral(peripheral: CBPeripheral!, didDiscoverCharacteristicsForService service: CBService!, error: NSError!) {
-        if let characteristics = service.characteristics as? [CBCharacteristic] {
+    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+        if let characteristics = service.characteristics {
             var gpioInputStateCharacteristic: CBCharacteristic?
             var gpioOutputStateCharacteristic: CBCharacteristic?
 
@@ -130,27 +128,29 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
             if let input = gpioInputStateCharacteristic, output = gpioOutputStateCharacteristic {
                 state = .Connected(peripheral, inputCharacteristic: input, outputCharacteristic: output)
             } else {
-                println("Discovered characteristics, but failed to find GPIO characteristics.")
+                print("Discovered characteristics, but failed to find GPIO characteristics.")
             }
         } else {
-            println("Failed to discover characteristics. \(error)")
+            print("Failed to discover characteristics. \(error)")
             state = .Uninitialized
         }
     }
 
-    func peripheral(peripheral: CBPeripheral!, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
-        println("Updated notification state for characteristic: \(characteristic.UUID)")
+    func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        print("Updated notification state for characteristic: \(characteristic.UUID)")
     }
 
-    func peripheral(peripheral: CBPeripheral!, didUpdateValueForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
-        println("Updated value for characteristic: \(characteristic.UUID)")
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        print("Updated value for characteristic: \(characteristic.UUID)")
 
         // GPIO state is a bitmask. Since there is only one input, the possible values are 0 and 1
         if characteristic.UUID == gpioInputStateUuid {
-            var state: UInt8 = 0
-            characteristic.value().getBytes(&state, length: 1)
-            if state == 1 {
-                controlledObject.performAction()
+            if let value = characteristic.value {
+                var state: UInt8 = 0
+                value.getBytes(&state, length: 1)
+                if state == 1 {
+                    controlledObject.performAction()
+                }
             }
         }
     }
