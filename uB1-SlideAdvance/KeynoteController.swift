@@ -13,18 +13,14 @@ class KeynoteController: RemoteControllable {
     func performAction() {
         let source = "Tell Application \"Keynote\"\nshow next\nEnd Tell"
 
-        if let language = OSALanguage(forName: "AppleScript"), script = OSAScript(source: source, language: language) {
-            var errorInfo: NSDictionary?
+        var errorInfo: NSDictionary?
 
-            if !script.compileAndReturnError(&errorInfo) {
-                print("Next script failed to compile: \(errorInfo)")
-            }
-
-            let result = script.executeAndReturnError(&errorInfo)
-            print("Tried to show next. Result: \(result), errorInfo: \(errorInfo)")
-        } else {
-            print("Failed to compile script with AppleScript: \(source)")
+        guard let language = OSALanguage(forName: "AppleScript"), script = OSAScript(source: source, language: language) where script.compileAndReturnError(nil) else {
+            preconditionFailure("Failed to compile script. Source: \(source), errorInfo? \(errorInfo)")
         }
+
+        let result = script.executeAndReturnError(&errorInfo)
+        print("Tried to show next. Result: \(result), errorInfo: \(errorInfo)")
     }
 
 }

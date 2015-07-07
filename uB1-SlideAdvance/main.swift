@@ -8,5 +8,5 @@
 
 import Foundation
 
-let btRemote = BluetoothRemoteController(keynoteController: KeynoteController())
+let btRemote = BluetoothRemoteController(controlledObject: KeynoteController(), deviceName: "TiWi-uB1")
 CFRunLoopRun()

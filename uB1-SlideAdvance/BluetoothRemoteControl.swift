@@ -9,12 +9,26 @@
 import Foundation
 import CoreBluetooth
 
-class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+protocol CBUUIDSearchable {
+    var UUID: CBUUID { get }
+}
+extension CBService : CBUUIDSearchable {}
+extension CBCharacteristic : CBUUIDSearchable {}
 
-    private let deviceName          = "TiWi-uB1"
-    private let gpioServiceUuid     = CBUUID(string: "3347AAA0-FB94-11E2-A8E4-F23C91AEC05E")
-    private let gpioInputStateUuid  = CBUUID(string: "3347AAA3-FB94-11E2-A8E4-F23C91AEC05E") // Read Notify
-    private let gpioOutputStateUuid = CBUUID(string: "3347AAA4-FB94-11E2-A8E4-F23C91AEC05E") // Read Write
+extension CollectionType where Generator.Element : CBUUIDSearchable {
+    func findUUID(uuid: CBUUID) -> Generator.Element? {
+        return filter({ $0.UUID == uuid }).first
+    }
+}
+
+class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+    private enum UUIDs {
+        static let GpioService     = CBUUID(string: "3347AAA0-FB94-11E2-A8E4-F23C91AEC05E")
+        static let GpioInputState  = CBUUID(string: "3347AAA3-FB94-11E2-A8E4-F23C91AEC05E") // Read Notify
+        static let GpioOutputState = CBUUID(string: "3347AAA4-FB94-11E2-A8E4-F23C91AEC05E") // Read Write
+    }
+
+    private let deviceName: String
 
     private let centralManager: CBCentralManager = CBCentralManager(delegate: nil, queue: nil)
 
@@ -26,8 +40,7 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
                 case .Discovering:
                     centralManager.stopScan()
 
-                default:
-                    print("No action for leaving state")
+                default: ()
             }
         }
 
@@ -43,23 +56,23 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
                     centralManager.connectPeripheral(peripheral, options: [:])
 
                 case let .InterrogatingServices(peripheral):
-                    peripheral.discoverServices([gpioServiceUuid])
+                    peripheral.discoverServices([UUIDs.GpioService])
 
                 case let .InterrogatingCharacteristics(peripheral, service):
-                    peripheral.discoverCharacteristics([gpioInputStateUuid, gpioOutputStateUuid], forService: service)
+                    peripheral.discoverCharacteristics([UUIDs.GpioInputState, UUIDs.GpioOutputState], forService: service)
 
                 case let .Connected(peripheral, inputCharacteristic, _):
                     peripheral.setNotifyValue(true, forCharacteristic: inputCharacteristic)
 
-                default:
-                    print("No action for entering state")
+                default: ()
             }
         }
     }
 
-    init(keynoteController: RemoteControllable) {
+    init(controlledObject: RemoteControllable, deviceName: String) {
         state = .Uninitialized
-        self.controlledObject = keynoteController
+        self.controlledObject = controlledObject
+        self.deviceName = deviceName
 
         super.init()
 
@@ -70,15 +83,12 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
     //MARK: CBCentralManagerDelegate conformance
 
     func centralManagerDidUpdateState(central: CBCentralManager) {
-        if central.state == .PoweredOn {
-            state = .Discovering
-        } else {
-            state = .Uninitialized
-        }
+        state = (central.state == .PoweredOn) ? .Discovering : .Uninitialized
     }
 
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Discovered \(peripheral)")
+
         if let peripheralName = peripheral.name where peripheralName == deviceName {
             state = .Connecting(peripheral)
         }
@@ -95,45 +105,23 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
     //MARK: CBPeripheralDelegate conformance
 
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
-        if let services = peripheral.services {
-            for service in services {
-                if service.UUID == gpioServiceUuid {
-                    state = .InterrogatingCharacteristics(peripheral, gpioService: service)
-                    return
-                }
-                print("Discovered services, but failed to find GPIO service.")
-            }
-        } else {
-            print("Failed to discover services. \(error)")
+        guard let services = peripheral.services, gpioService = services.findUUID(UUIDs.GpioService) else {
+            print("Could not find GPIO service! Error? \(error)")
+            state = .Uninitialized
+            return
         }
-        state = .Uninitialized
+
+        state = .InterrogatingCharacteristics(peripheral, gpioService: gpioService)
     }
 
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
-        if let characteristics = service.characteristics {
-            var gpioInputStateCharacteristic: CBCharacteristic?
-            var gpioOutputStateCharacteristic: CBCharacteristic?
-
-            for characteristic in characteristics {
-                peripheral.discoverDescriptorsForCharacteristic(characteristic)
-
-                if characteristic.UUID == gpioInputStateUuid {
-                    gpioInputStateCharacteristic = characteristic
-                }
-                if characteristic.UUID == gpioOutputStateUuid {
-                    gpioOutputStateCharacteristic = characteristic
-                }
-            }
-
-            if let input = gpioInputStateCharacteristic, output = gpioOutputStateCharacteristic {
-                state = .Connected(peripheral, inputCharacteristic: input, outputCharacteristic: output)
-            } else {
-                print("Discovered characteristics, but failed to find GPIO characteristics.")
-            }
-        } else {
-            print("Failed to discover characteristics. \(error)")
+        guard let characteristics = service.characteristics, input = characteristics.findUUID(UUIDs.GpioInputState), output = characteristics.findUUID(UUIDs.GpioOutputState) else {
+            print("Could not find GPIO characteristics! Error? \(error)")
             state = .Uninitialized
+            return
         }
+
+        state = .Connected(peripheral, inputCharacteristic: input, outputCharacteristic: output)
     }
 
     func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
@@ -141,17 +129,22 @@ class BluetoothRemoteController : NSObject, CBCentralManagerDelegate, CBPeripher
     }
 
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        print("Updated value for characteristic: \(characteristic.UUID)")
+        guard characteristic.UUID == UUIDs.GpioInputState else {
+            print("didUpdateValueForCharacteristic but UUID is not GPIO input!")
+            return
+        }
+
+        guard let value = characteristic.value else {
+            print("didUpdateValueForCharacteristic but value is nil NSData! Error? \(error)")
+            return
+        }
 
         // GPIO state is a bitmask. Since there is only one input, the possible values are 0 and 1
-        if characteristic.UUID == gpioInputStateUuid {
-            if let value = characteristic.value {
-                var state: UInt8 = 0
-                value.getBytes(&state, length: 1)
-                if state == 1 {
-                    controlledObject.performAction()
-                }
-            }
+        var state: UInt8 = 0
+        value.getBytes(&state, length: 1)
+        if state == 1 {
+            controlledObject.performAction()
         }
     }
+
 }
