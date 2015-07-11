@@ -8,7 +8,7 @@
 
 import CoreBluetooth
 
-enum BluetoothState {
+enum BluetoothState: CustomStringConvertible {
 
     case Uninitialized
 
@@ -28,5 +28,17 @@ enum BluetoothState {
     case Connected(CBPeripheral,
         inputCharacteristic: CBCharacteristic,
         outputCharacteristic: CBCharacteristic)
+
+    var description: String {
+        switch self {
+            case .Uninitialized:                return "Uninitialized"
+            case .Discovering:                  return "Discovering"
+            case .Connecting:                   return "Connecting"
+            case .InterrogatingServices:        return "InterrogatingServices"
+            case .InterrogatingCharacteristics: return "InterrogatingCharacteristics"
+            case .Subscribing:                  return "Subscribing"
+            case .Connected:                    return "Connected"
+        }
+    }
 
 }
